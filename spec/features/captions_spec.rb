@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe "Captions", type: :request do
@@ -21,8 +23,8 @@ RSpec.describe "Captions", type: :request do
 
         json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response[:captions].first).to match(hash_including({
-                                                                        url: url,
-                                                                        text: text
+                                                                         url: url,
+                                                                         text: text
                                                                        }))
       end
     end

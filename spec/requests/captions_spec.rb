@@ -40,10 +40,10 @@ RSpec.describe 'Captions', type: :request do
 
       json_response = JSON.parse(response.body, symbolize_names: true)
       expect(json_response[:caption]).to match(hash_including({
-        url: url,
-        text: text,
-        caption_url: nil
-      }))
+                                                                url: url,
+                                                                text: text,
+                                                                caption_url: nil
+                                                              }))
     end
   end
 end
