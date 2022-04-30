@@ -15,12 +15,12 @@ class CaptionsController < ApplicationController
 
   def create
     caption =
-    {
+      {
         id: 1,
         url: params[:caption][:url],
         text: params[:caption][:text],
         caption_url: "http://example.com/images/meme.jpb"
-    }
+      }
 
     render json: { caption: caption }
   end
