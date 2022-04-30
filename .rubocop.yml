@@ -13,5 +13,5 @@ Style/StringLiterals:
 Style/Documentation:
   Enabled: false
 
-RSpec/ExampleLenght:
+RSpec/ExampleLength:
   Enabled: false
