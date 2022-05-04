@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe "Captions", type: :request do
   describe 'when creating a caption' do
-    let(:url) { Faker::Internet.url }
+    let(:url) { Faker::LoremFlickr.image}
     let(:text) { Faker::TvShows::GameOfThrones.quote }
     let(:params) do
       {
