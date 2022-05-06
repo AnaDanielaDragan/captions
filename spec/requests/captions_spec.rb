@@ -20,8 +20,7 @@ RSpec.describe 'Captions', type: :request do
   describe 'POST /captions' do
     let(:url) { Faker::LoremFlickr.image }
     let(:text) { Faker::TvShows::GameOfThrones.quote }
-    let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" + ".png"}
-    # put image name here, after implementing generate_name method
+    let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" }
 
     let(:params) do
       {
@@ -44,7 +43,7 @@ RSpec.describe 'Captions', type: :request do
       expect(json_response[:caption]).to match(hash_including({
                                                                 url: url,
                                                                 text: text,
-                                                                caption_url: "http://example.com/images/#{image_name}"
+                                                                caption_url: "images/#{image_name}.png"
                                                               }))
     end
   end
