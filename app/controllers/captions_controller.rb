@@ -23,4 +23,10 @@ class CaptionsController < ApplicationController
 
     render json: { caption: caption }, status: :created
   end
+
+  def show
+    caption = Caption.find(params[:id])
+
+    render json: { caption: caption }
+  end
 end
