@@ -90,4 +90,29 @@ RSpec.describe 'Captions', type: :request do
                                                               }))
     end
   end
+
+  describe 'DELETE /captions/:id' do
+    let(:url) { Faker::LoremFlickr.image }
+    let(:text) { Faker::TvShows::GameOfThrones.quote }
+    let(:params) do
+      {
+        caption: {
+          url: url,
+          text: text
+        }
+      }
+    end
+
+    it 'responds with 200' do
+      post captions_path, params: params
+
+      json_response = JSON.parse(response.body, symbolize_names: true)
+
+      id = json_response[:caption][:id]
+
+      delete caption_path(id)
+      expect(response).to have_http_status(:ok)
+    end
+
+  end
 end

@@ -29,4 +29,11 @@ class CaptionsController < ApplicationController
 
     render json: { caption: caption }
   end
+
+  def destroy
+    caption = Caption.find(params[:id])
+    caption.destroy
+
+    redirect_to caption_path(caption), status: :ok
+  end
 end
