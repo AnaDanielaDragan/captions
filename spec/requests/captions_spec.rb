@@ -47,4 +47,47 @@ RSpec.describe 'Captions', type: :request do
                                                               }))
     end
   end
+
+  describe 'GET /captions/:id' do
+    let(:url) { Faker::LoremFlickr.image }
+    let(:text) { Faker::TvShows::GameOfThrones.quote }
+    let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" }
+    let(:params) do
+      {
+        caption: {
+          url: url,
+          text: text
+        }
+      }
+    end
+    let(:id) {}
+
+    it 'responds with 200' do
+      post captions_path, params: params
+
+      json_response = JSON.parse(response.body, symbolize_names: true)
+
+      id = json_response[:caption][:id]
+
+      get caption_path(id)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'responds with correct body' do
+      post captions_path, params: params
+
+      json_response = JSON.parse(response.body, symbolize_names: true)
+
+      id = json_response[:caption][:id]
+
+      get caption_path(id)
+
+      json_response = JSON.parse(response.body, symbolize_names: true)
+      expect(json_response[:caption]).to match(hash_including({
+                                                                url: url,
+                                                                text: text,
+                                                                caption_url: "images/#{image_name}.png"
+                                                              }))
+    end
+  end
 end
