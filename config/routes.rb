@@ -7,4 +7,6 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   resources :captions
+
+  get '/images/:id', to: 'images#show'
 end
