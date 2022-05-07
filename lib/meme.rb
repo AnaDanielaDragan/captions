@@ -5,6 +5,12 @@ require './lib/file_downloader'
 class Meme
   attr_accessor :image_url, :text, :file_name
 
+  @config = OpenStruct.new(images_dir: './images')
+
+  def self.configure
+    yield(@config)
+  end
+
   def create
     save_image
     add_text
@@ -12,7 +18,8 @@ class Meme
 
   def self.file_path(file_name)
     # delete file after tests (see previous code)
-    "images/#{file_name}"
+
+    "#{@config.images_dir}/#{file_name}"
   end
 
   private
@@ -20,6 +27,7 @@ class Meme
   def save_image
     generate_name(image_url, text)
     @meme_path = self.class.file_path(@file_name)
+
     FileDownloader.download_file(image_url, @meme_path)
   end
 

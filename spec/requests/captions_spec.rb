@@ -43,7 +43,7 @@ RSpec.describe 'Captions', type: :request do
       expect(json_response[:caption]).to match(hash_including({
                                                                 url: url,
                                                                 text: text,
-                                                                caption_url: "images/#{image_name}.png"
+                                                                caption_url: "spec/images/#{image_name}.png"
                                                               }))
     end
   end
@@ -86,7 +86,7 @@ RSpec.describe 'Captions', type: :request do
       expect(json_response[:caption]).to match(hash_including({
                                                                 url: url,
                                                                 text: text,
-                                                                caption_url: "images/#{image_name}.png"
+                                                                caption_url: "spec/images/#{image_name}.png"
                                                               }))
     end
   end
@@ -113,6 +113,5 @@ RSpec.describe 'Captions', type: :request do
       delete caption_path(id)
       expect(response).to have_http_status(:ok)
     end
-
   end
 end
