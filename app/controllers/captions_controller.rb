@@ -17,7 +17,7 @@ class CaptionsController < ApplicationController
     meme.text = attributes[:text]
     meme.create
 
-    attributes[:caption_url] = Meme.file_path(meme.file_name)
+    attributes[:caption_url] = "/images/#{meme.file_name}"
 
     caption = Caption.create(attributes)
 
