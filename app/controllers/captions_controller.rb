@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/meme'
+require './lib/meme_generator'
 
 class CaptionsController < ApplicationController
   def index
@@ -17,7 +17,7 @@ class CaptionsController < ApplicationController
     meme.text = attributes[:text]
     meme.create
 
-    attributes[:caption_url] = Meme.file_path(meme.file_name)
+    attributes[:caption_url] = "/images/#{meme.file_name}"
 
     caption = Caption.create(attributes)
 
@@ -28,5 +28,12 @@ class CaptionsController < ApplicationController
     caption = Caption.find(params[:id])
 
     render json: { caption: caption }
+  end
+
+  def destroy
+    caption = Caption.find(params[:id])
+    caption.destroy
+
+    redirect_to caption_path(caption), status: :ok
   end
 end

@@ -43,7 +43,7 @@ RSpec.describe 'Captions', type: :request do
       expect(json_response[:caption]).to match(hash_including({
                                                                 url: url,
                                                                 text: text,
-                                                                caption_url: "images/#{image_name}.png"
+                                                                caption_url: "/images/#{image_name}.jpg"
                                                               }))
     end
   end
@@ -62,22 +62,19 @@ RSpec.describe 'Captions', type: :request do
     end
     let(:id) {}
 
+    before { post captions_path, params: params }
+
     it 'responds with 200' do
-      post captions_path, params: params
-
       json_response = JSON.parse(response.body, symbolize_names: true)
-
       id = json_response[:caption][:id]
 
       get caption_path(id)
+
       expect(response).to have_http_status(:ok)
     end
 
     it 'responds with correct body' do
-      post captions_path, params: params
-
       json_response = JSON.parse(response.body, symbolize_names: true)
-
       id = json_response[:caption][:id]
 
       get caption_path(id)
@@ -86,8 +83,32 @@ RSpec.describe 'Captions', type: :request do
       expect(json_response[:caption]).to match(hash_including({
                                                                 url: url,
                                                                 text: text,
-                                                                caption_url: "images/#{image_name}.png"
+                                                                caption_url: "/images/#{image_name}.jpg"
                                                               }))
+    end
+  end
+
+  describe 'DELETE /captions/:id' do
+    let(:url) { Faker::LoremFlickr.image }
+    let(:text) { Faker::TvShows::GameOfThrones.quote }
+    let(:params) do
+      {
+        caption: {
+          url: url,
+          text: text
+        }
+      }
+    end
+
+    it 'responds with 200' do
+      post captions_path, params: params
+
+      json_response = JSON.parse(response.body, symbolize_names: true)
+
+      id = json_response[:caption][:id]
+
+      delete caption_path(id)
+      expect(response).to have_http_status(:ok)
     end
   end
 end
