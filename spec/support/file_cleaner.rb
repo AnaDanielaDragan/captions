@@ -2,6 +2,6 @@
 
 RSpec.configure do |config|
   config.after do
-    FileUtils.rm_r Dir.glob('./spec/images/*')
+    # FileUtils.rm_r Dir.glob('./spec/images/*')
   end
 end

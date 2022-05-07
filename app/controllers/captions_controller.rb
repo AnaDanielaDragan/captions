@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/meme'
+require './lib/meme_generator'
 
 class CaptionsController < ApplicationController
   def index

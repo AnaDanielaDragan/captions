@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/errors/invalid_file_uri_error'
+require_relative 'invalid_file_uri_error'
 
 class FileDownloader
   def self.download_file(image_url, path)

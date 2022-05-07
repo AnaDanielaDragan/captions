@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require './lib/file_downloader'
+require_relative 'file_downloader'
 
 class Meme
   attr_accessor :image_url, :text, :file_name
@@ -45,6 +45,6 @@ class Meme
 
   def generate_name(url, text)
     file = Digest::MD5.hexdigest "#{url}, #{text}"
-    @file_name = "#{file}.png"
+    @file_name = "#{file}.jpeg"
   end
 end
