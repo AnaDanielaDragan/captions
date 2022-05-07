@@ -43,7 +43,7 @@ RSpec.describe 'Captions', type: :request do
       expect(json_response[:caption]).to match(hash_including({
                                                                 url: url,
                                                                 text: text,
-                                                                caption_url: "spec/images/#{image_name}.png"
+                                                                caption_url: "spec/images/#{image_name}.jpg"
                                                               }))
     end
   end
@@ -83,7 +83,7 @@ RSpec.describe 'Captions', type: :request do
       expect(json_response[:caption]).to match(hash_including({
                                                                 url: url,
                                                                 text: text,
-                                                                caption_url: "spec/images/#{image_name}.png"
+                                                                caption_url: "spec/images/#{image_name}.jpg"
                                                               }))
     end
   end

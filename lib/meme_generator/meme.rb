@@ -3,23 +3,30 @@
 require_relative 'file_downloader'
 
 class Meme
-  attr_accessor :image_url, :text, :file_name
+  @config = OpenStruct.new(images_dir: './images', test_mode: false)
 
-  @config = OpenStruct.new(images_dir: './images')
+  class << self
+    attr_reader :config
 
-  def self.configure
-    yield(@config)
+    def configure
+      yield(@config)
+    end
+
+    def file_path(file_name)
+      # delete file after tests (see previous code)
+
+      "#{@config.images_dir}/#{file_name}"
+    end
   end
+
+  attr_accessor :image_url, :text, :file_name
 
   def create
     save_image
+
+    return if self.class.config.test_mode
+
     add_text
-  end
-
-  def self.file_path(file_name)
-    # delete file after tests (see previous code)
-
-    "#{@config.images_dir}/#{file_name}"
   end
 
   private
@@ -45,6 +52,6 @@ class Meme
 
   def generate_name(url, text)
     file = Digest::MD5.hexdigest "#{url}, #{text}"
-    @file_name = "#{file}.jpeg"
+    @file_name = "#{file}.jpg"
   end
 end
