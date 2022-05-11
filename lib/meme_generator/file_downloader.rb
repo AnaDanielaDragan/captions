@@ -7,9 +7,7 @@ class FileDownloader
     uri = URI.parse(image_url)
 
     uri.open do |file_from_uri|
-      File.open(path, 'wb') do |file|
-        file.write(file_from_uri.read)
-      end
+      File.binwrite(path, file_from_uri.read)
     end
   rescue URI::InvalidURIError
     raise InvalidFileUriError
