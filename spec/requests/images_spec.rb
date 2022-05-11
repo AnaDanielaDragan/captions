@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe "Images", type: :request do
   describe "GET /images/:id" do
-    subject { get "/images/#{image_name}" }
+    subject(:get_images) { get "/images/#{image_name}" }
 
     let(:image_name) { "#{SecureRandom.hex}.jpg" }
 
     it 'responds with 404' do
-      subject
+      get_images
 
       expect(response.status).to eq 404
     end
@@ -39,22 +39,6 @@ RSpec.describe "Images", type: :request do
         expect(response.content_type).to eq 'image/jpeg'
         expect(response.body).not_to be_empty
       end
-    end
-
-    it 'responds with 200' do
-      # To get the id:
-      # - do some post before
-      # - get it from somewhere else
-      get "/images/#{image_name}"
-
-      expect(response).to have_http_status(:ok)
-    end
-
-    it 'receives an image' do
-      get "/images/#{image_name}"
-
-      expect(response.body).not_to be_empty
-      binding.pry
     end
   end
 end
