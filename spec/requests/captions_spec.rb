@@ -45,9 +45,9 @@ RSpec.describe 'Captions', type: :request do
 
         json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response[:captions]).to include(hash_including({
-                                                                    id: id,
-                                                                    url: url
-                                                                  }))
+                                                                     id: id,
+                                                                     url: url
+                                                                   }))
       end
     end
   end

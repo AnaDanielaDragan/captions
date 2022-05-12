@@ -9,7 +9,7 @@ class FileDownloader
     uri.open do |file_from_uri|
       File.binwrite(path, file_from_uri.read)
     end
-  rescue
+  rescue StandardError
     raise InvalidFileUriError
   end
 end
