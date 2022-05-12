@@ -12,22 +12,30 @@ class CaptionsController < ApplicationController
   def create
     attributes = params.require(:caption).permit(:url, :text)
 
+    return head :bad_request unless attributes.key?(:url) && attributes.key?(:text)
+
     meme = Meme.new
     meme.image_url = attributes[:url]
     meme.text = attributes[:text]
     meme.create
 
-    attributes[:caption_url] = "/images/#{meme.file_name}"
-
-    caption = Caption.create(attributes)
+    caption = Caption.new(attributes)
+    caption.caption_url = "/images/#{meme.file_name}"
+    caption.save!
 
     render json: { caption: caption }, status: :created
+
+  rescue InvalidFileUriError, ActiveRecord::RecordInvalid
+    head :unprocessable_entity
   end
 
   def show
     caption = Caption.find(params[:id])
 
     render json: { caption: caption }
+
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
   end
 
   def destroy
