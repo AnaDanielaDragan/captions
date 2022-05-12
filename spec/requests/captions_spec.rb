@@ -99,6 +99,9 @@ RSpec.describe 'Captions', type: :request do
         post captions_path, params: params
 
         expect(response).to have_http_status(:bad_request)
+
+        json_response = JSON.parse(response.body, symbolize_names: true)
+        expect(json_response).to match(BadRequestError.body)
       end
     end
 
@@ -119,6 +122,9 @@ RSpec.describe 'Captions', type: :request do
         post captions_path, params: params
 
         expect(response).to have_http_status(:unprocessable_entity)
+
+        json_response = JSON.parse(response.body, symbolize_names: true)
+        expect(json_response).to match(MissingParametersError.body)
       end
     end
   end
@@ -163,9 +169,12 @@ RSpec.describe 'Captions', type: :request do
 
     context 'when requesting an inexistent resource' do
       it 'responds with 404' do
-        get caption_path('4a')
+        get caption_path('foo')
 
         expect(response).to have_http_status(:not_found)
+
+        json_response = JSON.parse(response.body, symbolize_names: true)
+        expect(json_response).to match(NotFoundError.body)
       end
     end
   end
