@@ -1,4 +1,12 @@
+# frozen_string_literal: true
+
 class InstagramCaptionsController < ApplicationController
+  def index
+    instagram_captions = InstagramCaption.all
+
+    render json: { captions: instagram_captions }
+  end
+
   def create
     attributes = params.require(:image).permit(:content_type, :url, :text, :filter, :color, :start_color, :end_color)
 

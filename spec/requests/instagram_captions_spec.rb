@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'InstagramCaptions', type: :request do
@@ -190,6 +192,60 @@ RSpec.describe 'InstagramCaptions', type: :request do
                                                                   text: text # ,
                                                                   # caption_url: "/images/#{image_name}.jpg"
                                                                 }))
+      end
+    end
+  end
+
+  describe 'GET /captions/instagram' do
+    it 'responds with 200' do
+      get instagram_captions_path
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'responds with correct body' do
+      get instagram_captions_path
+
+      json_response = JSON.parse(response.body, symbolize_names: true)
+      expect(json_response).to eq({ captions: [] })
+    end
+
+    context 'with existent caption' do
+      let(:url) { Faker::LoremFlickr.image }
+      let(:text) { Faker::TvShows::GameOfThrones.quote }
+      let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" }
+      let(:params) do
+        {
+          image: {
+            content_type: 'image',
+            url: url,
+            text: text
+          }
+        }
+      end
+
+      before { post instagram_captions_path, params: params }
+
+      it 'responds with 201' do
+        expect(response).to have_http_status(:created)
+
+        get instagram_captions_path
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'responds with correct body' do
+        json_response = JSON.parse(response.body, symbolize_names: true)
+        id = json_response[:caption][:id]
+
+        get instagram_captions_path
+
+        json_response = JSON.parse(response.body, symbolize_names: true)
+        expect(json_response[:captions]).to include(hash_including({
+                                                                     id: id,
+                                                                     content_type: "image",
+                                                                     url: url,
+                                                                     text: text # ,
+                                                                     # caption_url: "/images/#{image_name}.jpg"
+                                                                   }))
       end
     end
   end
