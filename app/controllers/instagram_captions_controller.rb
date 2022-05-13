@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InstagramCaptionsController < ApplicationController
   def index
     instagram_captions = InstagramCaption.all

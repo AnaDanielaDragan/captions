@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'InstagramCaptions', type: :request do
@@ -238,12 +240,12 @@ RSpec.describe 'InstagramCaptions', type: :request do
 
         json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response[:captions]).to include(hash_including({
-                                                                  id: id,
-                                                                  content_type: "image",
-                                                                  url: url,
-                                                                  text: text # ,
-                                                                  # caption_url: "/images/#{image_name}.jpg"
-                                                                }))
+                                                                     id: id,
+                                                                     content_type: "image",
+                                                                     url: url,
+                                                                     text: text # ,
+                                                                     # caption_url: "/images/#{image_name}.jpg"
+                                                                   }))
       end
     end
   end
