@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  resources :captions
+  resources :captions, :instagram_captions
 
   get '/images/:id', to: 'images#show'
 end

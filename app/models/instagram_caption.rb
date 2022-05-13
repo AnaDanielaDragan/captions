@@ -1,0 +1,2 @@
+class InstagramCaption < ApplicationRecord
+end
