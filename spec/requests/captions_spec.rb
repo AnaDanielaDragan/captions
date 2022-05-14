@@ -4,8 +4,24 @@ require 'rails_helper'
 
 RSpec.describe 'Captions', type: :request do
   describe 'GET /captions' do
+    context 'request is not authenticated' do
+      it 'returns 401' do
+        get captions_path
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'request uses expired token' do
+      it 'returns 401' do
+        headers = Timecop.freeze(2.days.ago) { auth_headers }
+
+        get captions_path, headers: headers
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
     it 'responds with 200' do
-      get captions_path
+      get captions_path, headers: auth_headers
       expect(response).to have_http_status(:ok)
     end
 
