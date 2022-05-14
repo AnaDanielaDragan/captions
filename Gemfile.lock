@@ -67,6 +67,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     ast (2.4.2)
+    bcrypt (3.1.17)
     bootsnap (1.11.1)
       msgpack (~> 1.2)
     builder (3.2.4)
@@ -224,6 +225,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bcrypt
   bootsnap
   debug
   digest
@@ -239,9 +241,6 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   tzinfo-data
-
-RUBY VERSION
-   ruby 3.0.3p157
 
 BUNDLED WITH
    2.2.32

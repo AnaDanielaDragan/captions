@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   resources :captions, :instagram_captions
+  resources :users do
+    collection do
+      post 'sign_up'
+    end
+  end
 
   get '/images/:id', to: 'images#show'
 end
