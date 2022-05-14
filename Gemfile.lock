@@ -67,6 +67,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     ast (2.4.2)
+    bcrypt (3.1.17)
     bootsnap (1.11.1)
       msgpack (~> 1.2)
     builder (3.2.4)
@@ -210,6 +211,7 @@ GEM
     thor (1.2.1)
     time (0.2.0)
       date
+    timecop (0.9.5)
     timeout (0.2.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -224,6 +226,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bcrypt
   bootsnap
   debug
   digest
@@ -238,10 +241,8 @@ DEPENDENCIES
   rspec-rails (~> 6.0.0.rc1)
   rubocop-rails
   rubocop-rspec
+  timecop
   tzinfo-data
-
-RUBY VERSION
-   ruby 3.0.3p157
 
 BUNDLED WITH
    2.2.32
