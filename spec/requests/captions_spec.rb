@@ -223,7 +223,7 @@ RSpec.describe 'Captions', type: :request do
     context 'with expired token' do
       it 'responds with 401' do
         id = json_response[:caption][:id]
-        
+
         headers = Timecop.freeze(2.days.ago) { auth_headers }
 
         get caption_path(id), headers: headers

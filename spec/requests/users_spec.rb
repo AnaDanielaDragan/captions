@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
@@ -20,15 +22,15 @@ RSpec.describe "Users", type: :request do
     end
 
     it 'creates a user' do
-      expect {
+      expect do
         signup
-      }.to change { User.count }.by(1)
+      end.to change(User, :count).by(1)
     end
 
     it 'creates a token' do
-      expect {
+      expect do
         signup
-      }.to change { Token.count }.by(1)
+      end.to change(Token, :count).by(1)
 
       token = Token.last
       expect(token.value).not_to be_blank

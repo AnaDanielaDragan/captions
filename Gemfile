@@ -39,9 +39,9 @@ gem "bootsnap", require: false
 # gem "rack-cors"
 
 gem 'digest'
+gem 'letter_opener'
 gem "mini_magick"
 gem 'open-uri'
-gem 'letter_opener'
 gem 'sidekiq'
 
 group :development, :test do
