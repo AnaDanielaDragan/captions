@@ -40,7 +40,6 @@ RSpec.describe "Users", type: :request do
 
       token = Token.last
 
-      json_response = JSON.parse(response.body, symbolize_names: true)
       expect(json_response[:token]).to eq token.value
     end
   end
@@ -66,7 +65,6 @@ RSpec.describe "Users", type: :request do
     it 'responds with correct body' do
       post '/login', params: params
 
-      json_response = JSON.parse(response.body, symbolize_names: true)
       expect(json_response[:user]).not_to be_empty
     end
   end
