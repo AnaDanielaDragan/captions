@@ -9,4 +9,7 @@ Rails.application.routes.draw do
   resources :captions, :instagram_captions
 
   get '/images/:id', to: 'images#show'
+
+  post '/signup', to: 'users#create'
+  post '/login', to: 'users#login'
 end

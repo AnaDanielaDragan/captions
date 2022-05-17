@@ -21,6 +21,7 @@ class CaptionsController < ApplicationController
     meme.image_url = attributes[:url]
     meme.text = attributes[:text]
     meme.create
+    # MemeGeneratorJob.perform_later(attributes[:url], attributes[:text])
 
     caption = Caption.new(attributes)
     caption.caption_url = "/images/#{meme.file_name}"
