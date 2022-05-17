@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   include BCrypt
 
-  has_many :token, dependent: :destroy
+  has_many :tokens, dependent: :destroy
 
   def password
     @password ||= Password.new(password_hash)

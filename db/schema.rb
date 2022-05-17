@@ -36,18 +36,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_14_105822) do
   end
 
   create_table "tokens", force: :cascade do |t|
-    t.string "token"
+    t.string "value"
+    t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "users_id"
-    t.index ["users_id"], name: "index_tokens_on_users_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_tokens_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password_hash"
+    t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-end 
+end
