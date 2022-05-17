@@ -42,9 +42,6 @@ jobs:
         PGUSER: postgres
         PGPORT: ${{ job.services.postgres.ports[5432] }}
         RAILS_ENV: test
-      run: |
-        rm config/database.yml
-        cp config/database.ci.yml config/database.yml
 
     - name: Setup DB
       run: bin/rails db:create db:schema:load
