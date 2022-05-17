@@ -7,6 +7,7 @@ class Token < ApplicationRecord
   before_validation :set_expires_at
 
   scope :active, -> { where('expires_at > ?', Time.now) }
+  scope :by_value, ->(value) { where(value: value) }
 
   def generate_value
     self.value = SecureRandom.hex if self.value.nil?

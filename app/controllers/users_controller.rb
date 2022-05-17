@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  skip_before_action :authorize!
+
   def create
     attributes = params.require(:user).permit(:username, :password)
 

@@ -4,14 +4,16 @@ require 'rails_helper'
 
 RSpec.describe 'Captions', type: :request do
   describe 'GET /captions' do
+    subject(:get_captions) { get captions_path, headers: auth_headers }
+
     it 'responds with 200' do
-      get captions_path
+      get_captions
 
       expect(response).to have_http_status(:ok)
     end
 
     it 'responds with correct body' do
-      get captions_path
+      get_captions
 
       expect(json_response).to eq({ captions: [] })
     end
@@ -29,10 +31,10 @@ RSpec.describe 'Captions', type: :request do
         }
       end
 
-      before { post captions_path, params: params }
+      before { post captions_path, headers: auth_headers, params: params }
 
       it 'responds with 200' do
-        get captions_path
+        get_captions
 
         expect(response).to have_http_status(:ok)
       end
@@ -40,7 +42,7 @@ RSpec.describe 'Captions', type: :request do
       it 'responds with correct body' do
         id = json_response[:caption][:id]
 
-        get captions_path
+        get_captions
 
         expect(json_response[:captions]).to include(hash_including({
                                                                      id: id,
@@ -48,10 +50,28 @@ RSpec.describe 'Captions', type: :request do
                                                                    }))
       end
     end
+
+    context 'without authorization' do
+      it 'responds with 401' do
+        get captions_path
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'with expired token' do
+      it 'responds with 401' do
+        headers = Timecop.freeze(2.days.ago) { auth_headers }
+
+        get captions_path, headers: headers
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   describe 'POST /captions' do
-    subject(:post_captions) { post captions_path, params: params }
+    subject(:post_captions) { post captions_path, headers: auth_headers, params: params }
 
     let(:url) { Faker::LoremFlickr.image }
     let(:text) { Faker::TvShows::GameOfThrones.quote }
@@ -125,6 +145,24 @@ RSpec.describe 'Captions', type: :request do
         expect(json_response).to match(MissingParametersError.body)
       end
     end
+
+    context 'without authorization' do
+      it 'responds with 401' do
+        post captions_path, params: params
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'with expired token' do
+      it 'responds with 401' do
+        headers = Timecop.freeze(2.days.ago) { auth_headers }
+
+        post captions_path, headers: headers, params: params
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
   end
 
   describe 'GET /captions/:id' do
@@ -140,12 +178,12 @@ RSpec.describe 'Captions', type: :request do
       }
     end
 
-    before { post captions_path, params: params }
+    before { post captions_path, headers: auth_headers, params: params }
 
     it 'responds with 200' do
       id = json_response[:caption][:id]
 
-      get caption_path(id)
+      get caption_path(id), headers: auth_headers
 
       expect(response).to have_http_status(:ok)
     end
@@ -153,7 +191,7 @@ RSpec.describe 'Captions', type: :request do
     it 'responds with correct body' do
       id = json_response[:caption][:id]
 
-      get caption_path(id)
+      get caption_path(id), headers: auth_headers
 
       expect(json_response[:caption]).to match(hash_including({
                                                                 url: url,
@@ -164,11 +202,33 @@ RSpec.describe 'Captions', type: :request do
 
     context 'when requesting an inexistent resource' do
       it 'responds with 404' do
-        get caption_path('foo')
+        get caption_path('foo'), headers: auth_headers
 
         expect(response).to have_http_status(:not_found)
 
         expect(json_response).to match(NotFoundError.body)
+      end
+    end
+
+    context 'without authorization' do
+      it 'responds with 401' do
+        id = json_response[:caption][:id]
+
+        get caption_path(id)
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'with expired token' do
+      it 'responds with 401' do
+        id = json_response[:caption][:id]
+        
+        headers = Timecop.freeze(2.days.ago) { auth_headers }
+
+        get caption_path(id), headers: headers
+
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
@@ -186,12 +246,37 @@ RSpec.describe 'Captions', type: :request do
     end
 
     it 'responds with 200' do
-      post captions_path, params: params
+      post captions_path, headers: auth_headers, params: params
 
       id = json_response[:caption][:id]
 
-      delete caption_path(id)
+      delete caption_path(id), headers: auth_headers
       expect(response).to have_http_status(:ok)
+    end
+
+    context 'without authorization' do
+      it 'responds with 401' do
+        post captions_path, headers: auth_headers, params: params
+
+        id = json_response[:caption][:id]
+
+        delete caption_path(id)
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'with expired token' do
+      it 'responds with 401' do
+        headers = Timecop.freeze(2.days.ago) { auth_headers }
+
+        post captions_path, headers: auth_headers, params: params
+
+        id = json_response[:caption][:id]
+
+        delete caption_path(id), headers: headers
+
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 end

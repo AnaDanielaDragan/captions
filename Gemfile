@@ -51,6 +51,7 @@ group :development, :test do
   gem "faker"
   gem "pry"
   gem "rspec-rails", "~> 6.0.0.rc1"
+  gem 'timecop'
 end
 
 group :development do
