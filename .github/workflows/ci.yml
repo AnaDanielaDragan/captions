@@ -14,38 +14,38 @@ jobs:
     container:
       image: ruby:3.0.3
 
-  services:
-    postgres:
-      image: postgres:10.8
-      env:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: railslearning
-        POSTGRES_DB: postgres
-      ports:
-        - 5432:5432
-      # needed because the postgres container does not provide a healthcheck
-      options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: railslearning
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-  steps:
-    - name: Check out code
-      uses: actions/checkout@v1
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
 
-    - name: Bundle install
-      env:
-        RAILS_ENV: test
-      run: |
-        gem install bundler
-        bundle install --jobs 4 --retry 3 --path vendor/bundle
+      - name: Bundle install
+        env:
+          RAILS_ENV: test
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
 
-    - name: Setup Config
-      env:
-        PGHOST: postgres
-        PGUSER: postgres
-        PGPORT: ${{ job.services.postgres.ports[5432] }}
-        RAILS_ENV: test
+      - name: Setup Config
+        env:
+          PGHOST: postgres
+          PGUSER: postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
+          RAILS_ENV: test
 
-    - name: Setup DB
-      run: bin/rails db:create db:schema:load
+      - name: Setup DB
+        run: bin/rails db:create db:schema:load
 
-    - name: Run tests
-      run: bundle exec rspec
+      - name: Run tests
+        run: bundle exec rspec
