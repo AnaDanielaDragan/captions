@@ -27,8 +27,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
       - name: Bundle install
         env:
@@ -43,6 +42,9 @@ jobs:
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
+        run: |
+          rm config/database.yml
+          cp config/database.ci.yml config/database.yml
 
       - name: Setup DB
         run: bin/rails db:create db:schema:load
