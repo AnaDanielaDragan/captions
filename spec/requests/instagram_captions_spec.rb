@@ -106,24 +106,24 @@ RSpec.describe 'InstagramCaptions', type: :request do
                                                                   # caption_url: "/images/#{image_name}.jpg"
                                                                 }))
       end
+    end
 
-      context 'with content type other than image' do
-        let(:params) do
-          {
-            image: {
-              content_type: 'color',
-              url: url,
-              text: text,
-              filter: 'blackwhite'
-            }
+    context 'with filter and content type other than image' do
+      let(:params) do
+        {
+          image: {
+            content_type: 'color',
+            url: url,
+            text: text,
+            filter: 'blackwhite'
           }
-        end
+        }
+      end
 
-        it 'responds with 422' do
-          post_instagram_caption
+      it 'responds with 422' do
+        post_instagram_caption
 
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
@@ -196,7 +196,7 @@ RSpec.describe 'InstagramCaptions', type: :request do
   end
 
   describe 'GET /captions/instagram' do
-    subject(:get_instagram_captions) { get instagram_captions_path, headers: auth_headers}
+    subject(:get_instagram_captions) { get instagram_captions_path, headers: auth_headers }
 
     it 'responds with 200' do
       get_instagram_captions
@@ -213,7 +213,6 @@ RSpec.describe 'InstagramCaptions', type: :request do
     context 'with existent caption' do
       let(:url) { Faker::LoremFlickr.image }
       let(:text) { Faker::TvShows::GameOfThrones.quote }
-      let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" }
       let(:params) do
         {
           image: {
@@ -235,6 +234,8 @@ RSpec.describe 'InstagramCaptions', type: :request do
       end
 
       it 'responds with correct body' do
+        let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" }
+
         id = json_response[:caption][:id]
 
         get_instagram_captions
