@@ -18,10 +18,10 @@ RSpec.describe "Captions", type: :request do
 
     context 'when requesting all captions' do
       it 'contains the previously created caption' do
-        post captions_path, params: params
-        get captions_path
+        post captions_path, headers: auth_headers, params: params
 
-        json_response = JSON.parse(response.body, symbolize_names: true)
+        get captions_path,  headers: auth_headers
+
         expect(json_response[:captions].first).to match(hash_including({
                                                                          url: url,
                                                                          text: text

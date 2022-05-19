@@ -89,7 +89,7 @@ RSpec.describe 'Captions', type: :request do
     it 'responds with 201' do
       post_captions
 
-      expect(response).to have_http_status(:created)
+      expect(response).to have_http_status(:accepted)
     end
 
     it 'responds with correct body' do
