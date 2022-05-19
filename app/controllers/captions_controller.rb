@@ -27,7 +27,13 @@ class CaptionsController < ApplicationController
     caption.caption_url = "/images/#{meme.file_name}"
     caption.save!
 
-    render json: { caption: caption }, status: :created
+    # TODO: Using Jobs
+    # # Return status 202, no other result
+    # # See in show, separate endpoint, the result
+    # # After the job is done, send mailer that job was processed, with the result
+    # # (server: request http, depending on the client)
+
+    render json: { caption: caption }, status: :accepted
   rescue InvalidFileUriError, ActiveRecord::RecordInvalid
     render json: MissingParametersError.body, status: :unprocessable_entity
   end

@@ -4,6 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'InstagramCaptions', type: :request do
   describe 'POST /captions/instagram' do
+    subject(:post_instagram_caption) { post instagram_captions_path, headers: auth_headers, params: params }
+
     let(:url) { Faker::LoremFlickr.image }
     let(:text) { Faker::TvShows::GameOfThrones.quote }
     let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" }
@@ -18,14 +20,14 @@ RSpec.describe 'InstagramCaptions', type: :request do
     end
 
     it 'responds with 201' do
-      post instagram_captions_path, params: params
+      post_instagram_caption
+
       expect(response).to have_http_status(:created)
     end
 
     it 'responds with correct body' do
-      post instagram_captions_path, params: params
+      post_instagram_caption
 
-      json_response = JSON.parse(response.body, symbolize_names: true)
       expect(json_response[:caption]).to match(hash_including({
                                                                 content_type: "image",
                                                                 url: url,
@@ -45,11 +47,9 @@ RSpec.describe 'InstagramCaptions', type: :request do
       end
 
       it 'responds with 422' do
-        post instagram_captions_path, params: params
+        post_instagram_caption
 
         expect(response).to have_http_status(:unprocessable_entity)
-
-        json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response).to match(MissingParametersError.body)
       end
     end
@@ -69,11 +69,9 @@ RSpec.describe 'InstagramCaptions', type: :request do
       end
 
       it 'responds with 422' do
-        post instagram_captions_path, params: params
+        post_instagram_caption
 
         expect(response).to have_http_status(:unprocessable_entity)
-
-        json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response).to match(MissingParametersError.body)
       end
     end
@@ -92,14 +90,14 @@ RSpec.describe 'InstagramCaptions', type: :request do
       end
 
       it 'responds with 201' do
-        post instagram_captions_path, params: params
+        post_instagram_caption
+
         expect(response).to have_http_status(:created)
       end
 
       it 'responds with correct body' do
-        post instagram_captions_path, params: params
+        post_instagram_caption
 
-        json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response[:caption]).to match(hash_including({
                                                                   content_type: 'image',
                                                                   url: url,
@@ -108,23 +106,24 @@ RSpec.describe 'InstagramCaptions', type: :request do
                                                                   # caption_url: "/images/#{image_name}.jpg"
                                                                 }))
       end
+    end
 
-      context 'with content type other than image' do
-        let(:params) do
-          {
-            image: {
-              content_type: 'color',
-              url: url,
-              text: text,
-              filter: 'blackwhite'
-            }
+    context 'with filter and content type other than image' do
+      let(:params) do
+        {
+          image: {
+            content_type: 'color',
+            url: url,
+            text: text,
+            filter: 'blackwhite'
           }
-        end
+        }
+      end
 
-        it 'responds with 422' do
-          post instagram_captions_path, params: params
-          expect(response).to have_http_status(:unprocessable_entity)
-        end
+      it 'responds with 422' do
+        post_instagram_caption
+
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
@@ -143,14 +142,14 @@ RSpec.describe 'InstagramCaptions', type: :request do
       end
 
       it 'responds with 201' do
-        post instagram_captions_path, params: params
+        post_instagram_caption
+
         expect(response).to have_http_status(:created)
       end
 
       it 'responds with correct body' do
-        post instagram_captions_path, params: params
+        post_instagram_caption
 
-        json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response[:caption]).to match(hash_including({
                                                                   content_type: 'color',
                                                                   color: color,
@@ -177,14 +176,14 @@ RSpec.describe 'InstagramCaptions', type: :request do
       end
 
       it 'responds with 201' do
-        post instagram_captions_path, params: params
+        post_instagram_caption
+
         expect(response).to have_http_status(:created)
       end
 
       it 'responds with correct body' do
-        post instagram_captions_path, params: params
+        post_instagram_caption
 
-        json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response[:caption]).to match(hash_including({
                                                                   content_type: 'gradient',
                                                                   start_color: start_color,
@@ -197,15 +196,17 @@ RSpec.describe 'InstagramCaptions', type: :request do
   end
 
   describe 'GET /captions/instagram' do
+    subject(:get_instagram_captions) { get instagram_captions_path, headers: auth_headers }
+
     it 'responds with 200' do
-      get instagram_captions_path
+      get_instagram_captions
+
       expect(response).to have_http_status(:ok)
     end
 
     it 'responds with correct body' do
-      get instagram_captions_path
+      get_instagram_captions
 
-      json_response = JSON.parse(response.body, symbolize_names: true)
       expect(json_response).to eq({ captions: [] })
     end
 
@@ -223,22 +224,21 @@ RSpec.describe 'InstagramCaptions', type: :request do
         }
       end
 
-      before { post instagram_captions_path, params: params }
+      before { post instagram_captions_path, headers: auth_headers, params: params }
 
       it 'responds with 201' do
         expect(response).to have_http_status(:created)
 
-        get instagram_captions_path
+        get_instagram_captions
+
         expect(response).to have_http_status(:ok)
       end
 
       it 'responds with correct body' do
-        json_response = JSON.parse(response.body, symbolize_names: true)
         id = json_response[:caption][:id]
 
-        get instagram_captions_path
+        get_instagram_captions
 
-        json_response = JSON.parse(response.body, symbolize_names: true)
         expect(json_response[:captions]).to include(hash_including({
                                                                      id: id,
                                                                      content_type: "image",

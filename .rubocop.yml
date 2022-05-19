@@ -7,6 +7,7 @@ AllCops:
   Exclude:
     - 'vendor/bundle'
     - 'bin/*'
+    - 'db/**/*'
 
 Style/StringLiterals:
   Enabled: false
@@ -24,8 +25,14 @@ Metrics/BlockLength:
 RSpec/MultipleExpectations:
   Enabled: false
 
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 RSpec/NamedSubject:
   Enabled: false
 
 Style/OpenStructUse:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
   Enabled: false
