@@ -213,6 +213,7 @@ RSpec.describe 'InstagramCaptions', type: :request do
     context 'with existent caption' do
       let(:url) { Faker::LoremFlickr.image }
       let(:text) { Faker::TvShows::GameOfThrones.quote }
+      let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" }
       let(:params) do
         {
           image: {
@@ -234,8 +235,6 @@ RSpec.describe 'InstagramCaptions', type: :request do
       end
 
       it 'responds with correct body' do
-        let(:image_name) { Digest::MD5.hexdigest "#{url}, #{text}" }
-
         id = json_response[:caption][:id]
 
         get_instagram_captions
